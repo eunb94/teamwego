@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.wego.web.hotel.HotelMapper">
+
+	<select id="createHotel" parameterType="hashmap">
+		${CREATE_HOTEL}
+	</select>
+	<select id="createRoom" parameterType="hashmap">
+		${CREATE_ROOM}
+	</select>
+		<select id="createComments" parameterType="hashmap">
+		${CREATE_COMMENTS}
+	</select>
+	
+	 <insert id="insertHotel" parameterType="Hotel">
+    	insert into hotel (HOTELNAME, HOTELIMG, HID,UNAME, HADDR, RATING,PRICE) values
+			(#{hotelname}, #{hotelimg}, #{hid}, #{uname}, #{haddr}, #{rating}, #{price})
+    </insert>
+     <insert id="insertRoom" parameterType="Room">
+    	insert into room(ROOMTYPE,HOTELINFO, UIDS, COMMENTS,RATING, ROOMIMG,PRICE, HOTELNAME, 
+    	HOTELIMG, HADDR, HSEQ) values
+			(#{roomtype}, #{hotelinfo}, #{uids}, #{comments},#{rating}, #{roomimg},#{price}, 
+			#{hotelname}, #{hotelimg}, #{haddr}, #{hseq})
+    </insert>
+         <insert id="insertComments" parameterType="Comments">
+    	insert into comments(COMMENTS,UID,RATING) values
+			(#{comments},#{uid},#{rating})
+    </insert>
+    
+    
+        <select id="countHotel" resultType="int">
+    	SELECT COUNT(*) FROM HOTEL
+    </select>
+    <select id="hotellist" parameterType="int" resultType="com.wego.web.hotel.Hotel">
+		<!-- SELECT * FROM HOTEL; -->
+		SELECT avg(r.rating) rating, h.hseq, h.PRICE, h.hotelname, h.hotelimg, h.haddr
+			FROM hotel h JOIN room r
+			ON r.hseq = h.hseq
+			GROUP BY hseq;
+
+	</select>
+	    <select id="roomlist" parameterType="int" resultType="com.wego.web.hotel.Room">
+		<!-- SELECT avg(r.rating) rating, r.hseq, r.PRICE, r.hotelname, r.hotelimg, r.haddr, r.comments, r.uids, r.rating,r.roomtype
+	FROM hotel h JOIN room r
+	ON r.hseq = h.hseq
+	GROUP BY hseq; -->
+	SELECT * FROM ROOM;
+	</select>
+		    <select id="commentslist" parameterType="int" resultType="com.wego.web.hotel.Comments">
+		SELECT * FROM COMMENTS;
+	</select>
+	
+	<select id="ratingcount" resultType="double">
+
+	</select>
+</mapper>
